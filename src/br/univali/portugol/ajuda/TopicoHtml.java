@@ -1,21 +1,25 @@
 package br.univali.portugol.ajuda;
 
+import java.io.File;
+
 /**
  *
  * @author Luiz Fernando
  */
-final class TopicoImpl implements Topico
+public final class TopicoHtml implements Topico
 {
     private String titulo;
     private String conteudo;
     private String icone;
     private int ordem;
     private Topicos subTopicos;
+    private File arquivoOrigem;
 
-    public TopicoImpl()
+    TopicoHtml(File arquivoOrigem)
     {
         this.ordem = Integer.MAX_VALUE;
         this.subTopicos = new Topicos();
+        this.arquivoOrigem = arquivoOrigem;
     }
     
     @Override
@@ -24,7 +28,7 @@ final class TopicoImpl implements Topico
         return titulo;
     }
 
-    public void setTitulo(String titulo)
+    void setTitulo(String titulo)
     {
         this.titulo = titulo;
     }
@@ -35,7 +39,7 @@ final class TopicoImpl implements Topico
         return conteudo;
     }
 
-    public void setConteudo(String conteudo)
+    void setConteudo(String conteudo)
     {
         this.conteudo = conteudo;
     }
@@ -46,7 +50,7 @@ final class TopicoImpl implements Topico
         return icone;
     }
 
-    public void setIcone(String icone)
+    void setIcone(String icone)
     {
         this.icone = icone;
     }    
@@ -67,5 +71,10 @@ final class TopicoImpl implements Topico
     public void setOrdem(int ordem)
     {
         this.ordem = ordem;
+    }
+
+    public File getArquivoOrigem()
+    {
+        return arquivoOrigem;
     }
 }

@@ -6,6 +6,8 @@ import br.univali.portugol.ajuda.ObservadorCarregamentoAjuda;
 import br.univali.portugol.ajuda.PreProcessadorConteudo;
 import br.univali.portugol.ajuda.Topico;
 import java.io.File;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  *
@@ -13,10 +15,67 @@ import java.io.File;
  */
 final class Teste implements ObservadorCarregamentoAjuda, PreProcessadorConteudo
 {
+    private static Pattern padraoTagPre = Pattern.compile("<pre[^>]*>(?<conteudo>[^<]*)</pre>", Pattern.CASE_INSENSITIVE);
+    private static Pattern padraoAtributoClass = Pattern.compile("(class)[^=]*=[^(\"|')]*(\"|')(?<valor>[^(\"|')]*)(\"|')");
+    
     public static void main(String[] args) throws Exception
     {
-        Teste teste = new Teste();
-        teste.testar();        
+        String s = 
+                "<pre class=\"codigo-portugol\">\n" +
+"programa\n" +
+"{\n" +
+"    //Função com retorno do tipo vazio sem parâmetro\n" +
+"    funcao vazio imprime_linha()\n" +
+"    {\n" +
+"        escreva(\"\\n-----------------------------\\n\")	\n" +
+"    }\n" +
+"\n" +
+"    //Função com retorno do tipo vazio e com um vetor como parâmetro\n" +
+"    funcao inicio(cadeia argumentos[])\n" +
+"    {\n" +
+"        //Imprime o retorno da função media\n" +
+"        escreva(media(4,9,8))\n" +
+"\n" +
+"        imprime_linha()\n" +
+"\n" +
+"        inteiro variavel = 123\n" +
+"\n" +
+"        zera_valor(variavel) \n" +
+"\n" +
+"        //Imprime 0\n" +
+"        escreva(variavel) \n" +
+"    }\n" +
+"\n" +
+"    //Função com retorno do tipo real e três parâmetros do tipo inteiro\n" +
+"    funcao real media(inteiro m1, inteiro m2, inteiro m3) \n" +
+"    {\n" +
+"        retorne (m1 * 2 + m2 * 3 + m3 * 8) / 13.0	\n" +
+"    }\n" +
+"\n" +
+"    //Função com retorno vazio e parâmetro por referência\n" +
+"    funcao zera_valor(inteiro &valor)\n" +
+"    {\n" +
+"        valor = 0\n" +
+"    }\n" +
+"}\n" +
+"            </pre>";
+        Matcher avaliadorTagPre = padraoTagPre.matcher(s);
+        
+        while (avaliadorTagPre.find())
+        {
+            String tag = avaliadorTagPre.group();
+            Matcher avaliadorAtributoClass = padraoAtributoClass.matcher(tag);
+            
+            if (avaliadorAtributoClass.find())
+            {
+                String conteudo = avaliadorTagPre.group("conteudo");
+                
+                System.out.println(conteudo.trim());
+                
+            }
+        }
+        //Teste teste = new Teste();
+        //teste.testar();        
     }
     
     private void testar() throws Exception
@@ -92,7 +151,7 @@ final class Teste implements ObservadorCarregamentoAjuda, PreProcessadorConteudo
     }
 
     @Override
-    public String processar(String conteudo)
+    public String processar(String conteudo, Topico topico)
     {
         conteudo = conteudo.replace("<button>", "<div>");
         conteudo = conteudo.replace("</button>", "</div>");

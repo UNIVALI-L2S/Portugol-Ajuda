@@ -6,5 +6,5 @@ package br.univali.portugol.ajuda;
  */
 public interface PreProcessadorConteudo
 {
-    public String processar(String conteudo);
+    public String processar(String conteudo, Topico topico);
 }

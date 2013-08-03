@@ -18,7 +18,7 @@ public final class Topicos implements Iterable<Topico>
     private Map<String, Topico> mapaTopicos;
     private List<Topico> listaTopicos;
     
-    Topicos()
+    public Topicos()
     {
         mapaTopicos = new TreeMap<>();
         listaTopicos = new ArrayList<>();

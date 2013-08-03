@@ -6,7 +6,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
@@ -267,24 +266,23 @@ public final class CarregadorAjuda
         String html = carregarHtml(arquivoHtml);
         
         extrator.extrair(html, getNomeCaminho(arquivoHtml));
-
                 
-        TopicoImpl topico = new TopicoImpl();
+        TopicoHtml topico = new TopicoHtml(arquivoHtml);
         
         topico.setTitulo(extrator.getTitulo());
         topico.setIcone(extrator.getIcone());
-        topico.setConteudo(preProcessarConteudo(html));
+        topico.setConteudo(preProcessarConteudo(html, topico));
         
         notificarCarregamentoTopicoFinalizado(indice);
         
         return topico;
     }
     
-    private String preProcessarConteudo(String conteudo)
+    private String preProcessarConteudo(String conteudo, Topico topico)
     {
         for (PreProcessadorConteudo preProcessador : preProcessadores)
         {
-            conteudo = preProcessador.processar(conteudo);
+            conteudo = preProcessador.processar(conteudo, topico);
         }
         
         return conteudo;
@@ -292,6 +290,7 @@ public final class CarregadorAjuda
     
     private String carregarHtml(File arquivo) throws ErroCarregamentoAjuda
     {
+        int caracteresLidos = 0;
         char[] buffer = new char[1048576]; // 1 MB
         StringBuilder html = new StringBuilder();        
         
@@ -303,9 +302,9 @@ public final class CarregadorAjuda
             
             try
             {
-                while (leitor.read(buffer, 0, buffer.length) > 0)
+                while ( ( caracteresLidos = leitor.read(buffer, 0, buffer.length)) > 0)
                 {
-                    html.append(buffer);
+                    html.append(buffer, 0, caracteresLidos);
                 }
             }            
             finally
@@ -320,22 +319,5 @@ public final class CarregadorAjuda
         }
         
         return html.toString();
-    }
-    
-    private String extrairTitulo(String html, File arquivo) throws ErroCarregamentoAjuda
-    {
-        Matcher avaliador = padraoTitulo.matcher(html);
-        
-        if (avaliador.find())
-        {
-            return avaliador.group("titulo");
-        }
-        
-        throw new ErroCarregamentoAjuda(String.format("Erro ao carregar a ajuda: o arquivo '%s' não possui a tag 'title'", getNomeCaminho(arquivo)));
-    }
-    
-    private String extrairIcone(String html, File arquivo)
-    {
-        return "icone.png";
     }
 }
