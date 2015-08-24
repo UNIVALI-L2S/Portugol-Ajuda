@@ -272,6 +272,7 @@ public final class CarregadorAjuda
         topico.setTitulo(extrator.getTitulo());
         topico.setIcone(extrator.getIcone());
         topico.setConteudo(preProcessarConteudo(html, topico));
+        topico.setArquivoOrigem(arquivoHtml);
         
         notificarCarregamentoTopicoFinalizado(indice);
         
@@ -317,7 +318,6 @@ public final class CarregadorAjuda
         {
             throw new ErroCarregamentoAjuda(String.format("Erro ao carregar o arquivo '%s' da ajuda: %s", getNomeCaminho(arquivo), excecao.getMessage()));
         }
-        
         return html.toString();
     }
 }

@@ -52,10 +52,6 @@ final class ExtratorDadosHtml
         {
             throw new ErroCarregamentoAjuda(String.format("Erro ao carregar a ajuda: o arquivo '%s' não possui a tag 'title'", nomeArquivo));
         }
-        
-        if (icone == null)
-        {
-            throw new ErroCarregamentoAjuda(String.format("Erro ao carregar a ajuda: o arquivo '%s' não possui a tag 'link' com os atributos 'rel=\"shortcut icon\"' e 'href'", nomeArquivo));
-        }
+		
     }
 }

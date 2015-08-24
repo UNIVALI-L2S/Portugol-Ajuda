@@ -73,8 +73,15 @@ public final class TopicoHtml implements Topico
         this.ordem = ordem;
     }
 
+    @Override
     public File getArquivoOrigem()
     {
         return arquivoOrigem;
+    }
+
+    @Override
+    public void setArquivoOrigem(File arquivo)
+    {
+        this.arquivoOrigem = arquivo;
     }
 }
